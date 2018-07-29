@@ -47,7 +47,8 @@ module.exports = {
 		}
 		this.browser = await puppeteer.launch({
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
-			headless: config.headless
+			headless: config.headless,
+			slowMo: config.slowMo,
 		});
 		this.pageBase = await this.browser.newPage();
 		this.pageCompare = await this.browser.newPage();
@@ -65,6 +66,7 @@ module.exports = {
 	},
 
 	performLogin: async function (page, baseUrl) {
+		await page.bringToFront();
 		await page.goto(baseUrl + '/index.php/login', {waitUntil: 'networkidle0'});
 		await page.type('#user', 'admin');
 		await page.type('#password', 'admin');
